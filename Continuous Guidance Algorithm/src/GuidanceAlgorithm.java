@@ -1,7 +1,11 @@
 
 public class GuidanceAlgorithm {
-	private static Controller controlLoop_parallax = new Controller(-200, 0, 0);
-	private static Controller controlLoop_offAxis = new Controller(2, 0, 0);
+	private static Controller controlLoop_parallax = new Controller(Constants.PARALLAX_KP,
+			                                                        Constants.PARALLAX_KI,
+			                                                        Constants.PARALLAX_KD);
+	private static Controller controlLoop_offAxis = new Controller(Constants.OFF_AXIS_KP,
+			                                                       Constants.OFF_AXIS_KI,
+			                                                       Constants.OFF_AXIS_KD);
 	
 	private static double parallax;
 	private static double offAxis;
