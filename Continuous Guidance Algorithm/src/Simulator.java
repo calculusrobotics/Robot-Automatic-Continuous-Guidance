@@ -62,7 +62,11 @@ public class Simulator extends JPanel {
 					parallax = cameraData[0];
 					offAxis = cameraData[1];
 				}
-				if (cycles % Constants.CAMERA_PERIOD_MSEC == Constants.CAMERA_LATENCY) { // latency on camera feed data
+				
+				double distance = oppy.getCamera().distTo(new Coord(0, 0));
+				
+				if ((cycles % Constants.CAMERA_PERIOD_MSEC == Constants.CAMERA_LATENCY) &&
+					(distance > Constants.GUIDANCE_STOP)) { // latency on camera feed data
 					// feed data from last capture to guidance algorithm
 					GuidanceAlgorithm.setParallax(parallax);
 					GuidanceAlgorithm.setOffAxis(offAxis);
@@ -78,9 +82,8 @@ public class Simulator extends JPanel {
 				frame.repaint();
 				
 				// if sufficiently close (2 in), stop running simulator
-				double distance = oppy.getCamera().distTo(new Coord(0, 0));
 				
-				if (distance <= 0.0254 * 2) {
+				if (distance <= Constants.STOP_AT) {
 					cont = false;
 				}
 				

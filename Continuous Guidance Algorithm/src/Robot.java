@@ -3,10 +3,10 @@ public class Robot {
 	public static final double SIZE2 = Constants.ROBOT_SIZE / 2;
 	public static final double DIAG = Math.sqrt(2) * SIZE2;
 	
-	private Coord pos = new Coord(Constants.HORIZONTAL_DISTANCE / 2.5, Constants.VERTICAL_DISTANCE / 2);
+	private Coord pos = new Coord(Constants.HORIZONTAL_STARTING_POINT, Constants.VERTICAL_STARTING_POINT);
 	private Coord camera_pos = new Coord(
-		Constants.HORIZONTAL_DISTANCE / 2.5,
-		Constants.VERTICAL_DISTANCE / 2 - SIZE2 // right in front of robot
+		Constants.HORIZONTAL_STARTING_POINT,
+		Constants.VERTICAL_STARTING_POINT - SIZE2 // right in front of robot
 	);
 	// 0 = straight up
 	// + = looking to the left
