@@ -10,8 +10,8 @@ public class Constants {
 	public static double RECTANGLE_DISTANCE = 0.1;
 	
 	// field dimensions
-	public static double HORIZONTAL_DISTANCE = 10;
-	public static double VERTICAL_DISTANCE = 10;
+	public static double HORIZONTAL_DISTANCE = 5;
+	public static double VERTICAL_DISTANCE = 5;
 	
 	public static double HORIZONTAL_STARTING_POINT = 0.5;
 	public static double VERTICAL_STARTING_POINT   = 2;
