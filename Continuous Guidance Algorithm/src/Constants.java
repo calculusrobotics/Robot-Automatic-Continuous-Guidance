@@ -1,12 +1,12 @@
 public class Constants {
 	public static final double VELOCITY_VARIATION = 0.0254;
 
-	public static final double VELOCITY_MAX = 2;
+	public static final double VELOCITY_MAX = 3;
 
 	public static final double GUIDANCE_STOP = 0.1;
-	public static final double STOP_AT = 0.1;
+	public static final double STOP_AT = 0.3;
 	
-	public static final double OFF_AXIS_KP = 4;
+	public static final double OFF_AXIS_KP = 3;
 	public static final double OFF_AXIS_KI = 0;
 	public static final double OFF_AXIS_KD = 0;
 
@@ -21,7 +21,7 @@ public class Constants {
 	public static double HORIZONTAL_DISTANCE = 5;
 	public static double VERTICAL_DISTANCE = 5;
 	
-	public static double HORIZONTAL_STARTING_POINT = 0.5;
+	public static double HORIZONTAL_STARTING_POINT = 1;
 	public static double VERTICAL_STARTING_POINT   = 2;
 	
 	
