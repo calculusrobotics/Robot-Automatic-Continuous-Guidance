@@ -33,6 +33,30 @@ public class Robot {
 		return robotAngle - angle;
 	}
 	
+	public double getLeftOffAxis() {
+		Coord vec = new Coord(
+			pos.getX() - Constants.LEFT_RECTANGLE.getX(),
+			pos.getY() - Constants.LEFT_RECTANGLE.getY()
+		);
+		
+		double rectangleAngle = Math.atan(vec.getX() / vec.getY());
+		
+		return rectangleAngle - angle;
+	}
+	
+	public double getRightOffAxis() {
+		Coord vec = new Coord(
+			pos.getX() - Constants.RIGHT_RECTANGLE.getX(),
+			pos.getY() - Constants.RIGHT_RECTANGLE.getY()
+		);
+		
+		double rectangleAngle = Math.atan(vec.getX() / vec.getY());
+		
+		return rectangleAngle - angle;
+	}
+	
+	
+	
 	public double getParallax() {
 		double distLeft = camera_pos.distTo(Constants.LEFT_RECTANGLE);
 		double distRight = camera_pos.distTo(Constants.RIGHT_RECTANGLE);
@@ -50,6 +74,13 @@ public class Robot {
 	 */
 	public void rotate(double omega) {
 		this.omega = omega;
+	}
+	
+	
+	
+	public void stop() {
+		linearVelocity = 0;
+		omega = 0;
 	}
 	
 	
@@ -91,11 +122,16 @@ public class Robot {
 	
 	
 	
-	public double[] updateCamera() {
-		return new double[] {
-			getParallax(),
-			getOffAxis()
-		};
+	public CameraFeedback updateCamera() {
+		double leftAngle = getLeftOffAxis();
+		double rightAngle = getRightOffAxis();
+		
+		boolean inFOV = !(
+			Math.abs(leftAngle) >= Constants.FOV_RAD2 ||
+			Math.abs(rightAngle) >= Constants.FOV_RAD2
+		);
+		
+		return new CameraFeedback(inFOV, getParallax(), getOffAxis());
 	}
 	
 	
@@ -127,6 +163,20 @@ public class Robot {
 	public Coord getBottomRight() {
 		double x = pos.getX() - DIAG * Math.sin(angle - 3 * Math.PI / 4);
 		double y = pos.getY() - DIAG * Math.cos(angle - 3 * Math.PI / 4);
+		
+		return new Coord(x, y);
+	}
+	
+	public Coord getFOVMarker1() {
+		double x = camera_pos.getX() - Constants.FOV_MARKER_LENGTH * Math.sin(angle + Constants.FOV_RAD2);
+		double y = camera_pos.getY() - Constants.FOV_MARKER_LENGTH * Math.cos(angle + Constants.FOV_RAD2);
+		
+		return new Coord(x, y);
+	}
+	
+	public Coord getFOVMarker2() {
+		double x = camera_pos.getX() - Constants.FOV_MARKER_LENGTH * Math.sin(angle - Constants.FOV_RAD2);
+		double y = camera_pos.getY() - Constants.FOV_MARKER_LENGTH * Math.cos(angle - Constants.FOV_RAD2);
 		
 		return new Coord(x, y);
 	}

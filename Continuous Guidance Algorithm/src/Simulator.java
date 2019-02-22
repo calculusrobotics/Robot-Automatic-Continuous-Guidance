@@ -34,6 +34,8 @@ public class Simulator extends JPanel {
 	private double user_velocity = 0;
 	private double user_acceleration = 0;
 	
+	private boolean inFOV = false;
+	
 	
 	
 	
@@ -70,31 +72,50 @@ public class Simulator extends JPanel {
 				
 				if (!userControl) {
 					if (cycles % Constants.CAMERA_PERIOD_MSEC == 0) {
-						double cameraData[] = oppy.updateCamera();
+						CameraFeedback cameraData = oppy.updateCamera();
 						
-						parallax = cameraData[0];
-						offAxis = cameraData[1];
+						inFOV = cameraData.isInFOV();
+						parallax = cameraData.getParallax();
+						offAxis = cameraData.getOffAxis();
 					}
 					
 					if ((cycles % Constants.CAMERA_PERIOD_MSEC == Constants.CAMERA_LATENCY) &&
 						(distance > Constants.GUIDANCE_STOP)) { // latency on camera feed data
-						// feed data from last capture to guidance algorithm
-						GuidanceAlgorithm.setParallax(parallax);
-						GuidanceAlgorithm.setOffAxis(offAxis);
-						
-						omega = GuidanceAlgorithm.getTurnRate();
+						if (inFOV) {
+							// feed data from last capture to guidance algorithm
+							oppy.setVelocity(Constants.VELOCITY_MAX);
+							
+							GuidanceAlgorithm.setParallax(parallax);
+							GuidanceAlgorithm.setOffAxis(offAxis);
+							
+							omega = GuidanceAlgorithm.getTurnRate();
+						} else {
+							GuidanceAlgorithm.setParallax(0);
+							GuidanceAlgorithm.setOffAxis(0);
+							
+							omega = 0;
+							oppy.stop();
+						}
 					}
 					
 					if (cycles % Constants.DRIVE_PERIOD_MSEC == 0) {
 						oppy.rotate(omega); // give it a new turn rate
 					}
-					
-					cycles++;
-					
-					oppy.setVelocity(Constants.VELOCITY_MAX);
 				} else {
-					user_velocity += user_acceleration / Constants.KINEMATICS_RATE_HZ;
+					// keep using camera when in user control
+					// (to test if tape in FOV)
+					if (cycles % Constants.CAMERA_PERIOD_MSEC == 0) {
+						CameraFeedback cameraData = oppy.updateCamera();
+						
+						inFOV = cameraData.isInFOV();
+						parallax = cameraData.getParallax();
+						offAxis = cameraData.getOffAxis();
+					}
 					
+					
+					
+					user_velocity += user_acceleration / Constants.KINEMATICS_RATE_HZ;
+
 					if (Math.abs(user_velocity) >= Constants.VELOCITY_MAX) {
 						user_velocity = Math.signum(user_velocity) * Constants.VELOCITY_MAX;
 					}
@@ -116,6 +137,8 @@ public class Simulator extends JPanel {
 				
 				
 				Thread.sleep(1L);
+				
+				cycles++;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -171,6 +194,24 @@ public class Simulator extends JPanel {
 			camera.getX() - 5, camera.getY() - 5,
 			10, 10 
 		);
+		
+		// FOV
+		if (inFOV) {
+			g.setColor(Color.BLUE);
+		} else {
+			g.setColor(Color.RED);
+		}
+		Point fovMarker1 = Constants.toPoint(oppy.getFOVMarker1());
+		Point fovMarker2 = Constants.toPoint(oppy.getFOVMarker2());
+		
+		g.drawLine(
+			camera.getX(), camera.getY(),
+			fovMarker1.getX(), fovMarker1.getY()
+		);
+		g.drawLine(
+				camera.getX(), camera.getY(),
+				fovMarker2.getX(), fovMarker2.getY()
+			);
 	}
 	
 	
@@ -187,7 +228,7 @@ public class Simulator extends JPanel {
 			if (code == KeyEvent.VK_ENTER) {
 				userControl = !userControl;
 				
-				oppy.rotate(0); // stop rotating
+				oppy.stop();
 				user_velocity = 0;
 				user_acceleration = 0;
 			}

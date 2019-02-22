@@ -51,6 +51,9 @@ public class Constants {
 	public static double CAMERA_FPS = 30.0;
 	public static int CAMERA_LATENCY = 1; // cycles
 	public static int CAMERA_PERIOD_MSEC = (int)(1000.0 / CAMERA_FPS);
+	public static double FOV_DEG = 75;
+	public static double FOV_RAD2 = FOV_DEG / 2 * Math.PI / 180;
+	public static double FOV_MARKER_LENGTH = 0.5;
 	
 	
 	
