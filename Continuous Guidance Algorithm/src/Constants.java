@@ -8,11 +8,11 @@ public class Constants {
 	public static final double GUIDANCE_STOP = 0.1;
 	public static final double STOP_AT = 0.3;
 	
-	public static final double OFF_AXIS_KP = 3;
+	public static final double OFF_AXIS_KP = 2;
 	public static final double OFF_AXIS_KI = 0;
 	public static final double OFF_AXIS_KD = 0;
 
-	public static final double PARALLAX_KP = -200;
+	public static final double PARALLAX_KP = -150;
 	public static final double PARALLAX_KI = 0;
 	public static final double PARALLAX_KD = 0;
 	
