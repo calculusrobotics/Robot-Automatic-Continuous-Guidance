@@ -6,9 +6,9 @@ public class Constants {
 	public static final double USER_CONTROL_ACCELERATION = 2; // m/s^2
 
 	public static final double GUIDANCE_STOP = 0.1;
-	public static final double STOP_AT = 0.3;
+	public static final double STOP_AT = 1.0;
 	
-	public static final double OFF_AXIS_KP = 2;
+	public static final double OFF_AXIS_KP = 3.5;
 	public static final double OFF_AXIS_KI = 0;
 	public static final double OFF_AXIS_KD = 0;
 
@@ -23,7 +23,7 @@ public class Constants {
 	public static double HORIZONTAL_DISTANCE = 5;
 	public static double VERTICAL_DISTANCE = 5;
 	
-	public static double HORIZONTAL_STARTING_POINT = 1;
+	public static double HORIZONTAL_STARTING_POINT = 0.5;
 	public static double VERTICAL_STARTING_POINT   = 3;
 	
 	
