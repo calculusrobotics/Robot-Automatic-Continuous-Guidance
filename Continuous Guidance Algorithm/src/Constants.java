@@ -1,4 +1,8 @@
 public class Constants {
+	
+	public static double VELOCITY_VARIATION = 0.03; // m/s
+	public static double VELOCITY_MAX = 3.0;        // m/s
+	
 	public static double RECTANGLE_DISTANCE = 0.1;
 	
 	public static double HORIZONTAL_DISTANCE = 10;
@@ -7,7 +11,7 @@ public class Constants {
 	public static int WIDTH = 1600;
 	public static int HEIGHT = 800;
 	
-	public static double ROBOT_SIZE = 0.3;
+	public static double ROBOT_SIZE = 1.0;
 	public static double CAMERA_SIZE = 0.05;
 	public static double CAMERA_RADIUS = CAMERA_SIZE / 2;
 	

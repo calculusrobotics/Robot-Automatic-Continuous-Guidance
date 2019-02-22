@@ -10,12 +10,12 @@ public class Robot {
 	// - = looking to the right
 	private double angle = 0;
 	
-	private double velocityVariation = 0.1;
+	private double velocityVariation = Constants.VELOCITY_VARIATION;
 	
 	
 	
 	// meters per second
-	private double linearVelocity = 1;
+	private double linearVelocity = Constants.VELOCITY_MAX;
 	
 	
 	
