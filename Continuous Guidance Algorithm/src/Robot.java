@@ -86,26 +86,45 @@ public class Robot {
 	
 	
 	public void updateKinematics() {
-		angle += omega / Constants.KINEMATICS_RATE_HZ;
+		double diffVelocity = omega * Constants.ROBOT_SIZE / 2.0;
+		
+		
+		
+		double leftVelocity = linearVelocity - diffVelocity;
+		if (Math.abs(leftVelocity) < velocityVariation) {
+			leftVelocity = 0;
+		} else {
+			leftVelocity += velocityVariation * (2 * Math.random() - 1);
+		}
+		
+		double rightVelocity = linearVelocity + diffVelocity;
+		if (Math.abs(rightVelocity) < velocityVariation) {
+			rightVelocity = 0;
+		} else {
+			rightVelocity += velocityVariation * (2 * Math.random() - 1);
+		}
+		
+		
+		
+		double real_linearVelocity = 1/2.0 * (leftVelocity + rightVelocity);
+		double real_omega = 2 * (rightVelocity - leftVelocity) / Constants.ROBOT_SIZE;
+		
+		
+		
+		angle += real_omega / Constants.KINEMATICS_RATE_HZ;
 		
 		angle += Math.PI;
 		angle %= (2 * Math.PI);
 		angle -= Math.PI;
-				
-		angle %= 360;
 		
 		
 		
 		// robot center
 		double x = pos.getX();
 		double y = pos.getY();
-		
-		if (Math.abs(linearVelocity) > Math.abs(velocityVariation)) {
-			double variation = velocityVariation * (2 * Math.random() - 1);
 
-			x -= (linearVelocity + variation) * Math.sin(angle) / Constants.KINEMATICS_RATE_HZ;
-			y -= (linearVelocity + variation) * Math.cos(angle) / Constants.KINEMATICS_RATE_HZ;
-		}
+		x -= real_linearVelocity * Math.sin(angle) / Constants.KINEMATICS_RATE_HZ;
+		y -= real_linearVelocity * Math.cos(angle) / Constants.KINEMATICS_RATE_HZ;
 		
 		pos.setX(x);
 		pos.setY(y);
