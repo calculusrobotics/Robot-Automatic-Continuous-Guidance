@@ -1,10 +1,8 @@
 public class Constants {
-	
-	public static double VELOCITY_VARIATION = 0.03; // m/s
-	public static double VELOCITY_MAX = 3.0;        // m/s
-	
+	// distance from target center to either rectangle
 	public static double RECTANGLE_DISTANCE = 0.1;
 	
+	// field dimensions
 	public static double HORIZONTAL_DISTANCE = 10;
 	public static double VERTICAL_DISTANCE = 10;
 	
@@ -22,7 +20,12 @@ public class Constants {
 	
 	
 	
-	public static double FPS = 50;
+	public static int CAMERA_FPS = 30;
+	public static int CAMERA_LATENCY = 1; // cycles
+	
+	public static int DRIVE_FPS = 50;
+	// main loop runs at 1000Hz (+ kinematics)
+	public static double KINEMATICS_FPS = 1000;
 	
 	
 	
