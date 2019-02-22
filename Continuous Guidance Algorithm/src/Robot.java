@@ -6,7 +6,7 @@ public class Robot {
 	private Coord pos = new Coord(Constants.HORIZONTAL_STARTING_POINT, Constants.VERTICAL_STARTING_POINT);
 	private Coord camera_pos = new Coord(
 		Constants.HORIZONTAL_STARTING_POINT,
-		Constants.VERTICAL_STARTING_POINT - SIZE2 // right in front of robot
+		Constants.VERTICAL_STARTING_POINT // center of robot
 	);
 	// 0 = straight up
 	// + = looking to the left
