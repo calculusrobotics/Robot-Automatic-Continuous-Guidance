@@ -25,10 +25,10 @@ public class Controller {
 	public double newValue(double error) {
 		double p_contribution = P * error;
 		
-		integral += error / Constants.FPS;
+		integral += error / Constants.CAMERA_FPS;
 		double i_contribution = I * integral;
 		
-		double deriv = (error - previous) * Constants.FPS;
+		double deriv = (error - previous) * Constants.CAMERA_FPS;
 		previous = error;
 		double d_contribution = D * deriv;
 		

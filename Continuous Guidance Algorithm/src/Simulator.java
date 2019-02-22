@@ -45,14 +45,50 @@ public class Simulator extends JPanel {
 		
 		
 		
-		long wait = (long) (1000 / Constants.FPS);
-		while (true) {
+		int cycles = 0;
+		
+		// BucketTables, basically
+		double parallax = 0;
+		double offAxis = 0;
+		
+		double omega = 0; // turn rate to give to drive subsystem
+		
+		boolean cont = true;
+		while (cont) {
 			try {
-				Thread.sleep(wait);
+				if (cycles % Constants.CAMERA_FPS == 0) {
+					double cameraData[] = oppy.updateCamera();
+					
+					parallax = cameraData[0];
+					offAxis = cameraData[1];
+				}
+				if (cycles % Constants.CAMERA_FPS == Constants.CAMERA_LATENCY) { // latency on camera feed data
+					// feed data from last capture to guidance algorithm
+					GuidanceAlgorithm.setParallax(parallax);
+					GuidanceAlgorithm.setOffAxis(offAxis);
+					
+					omega = GuidanceAlgorithm.getTurnRate();
+				}
 				
-				oppy.update();
+				if (cycles % Constants.DRIVE_FPS == 0) {
+					oppy.rotate(omega); // give it a new turn rate
+				}
 				
+				oppy.updateKinematics();
 				frame.repaint();
+				
+				// if sufficiently close (2 in), stop running simulator
+				double distance = oppy.getCamera().distTo(new Coord(0, 0));
+				
+				if (distance <= 0.0254 * 2) {
+					cont = false;
+				}
+				
+				
+				
+				Thread.sleep(1L);
+				
+				cycles++;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
