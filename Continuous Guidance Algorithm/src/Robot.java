@@ -131,9 +131,9 @@ public class Robot {
 		
 		
 		
-		// camera center
-		x = pos.getX() - SIZE2 * Math.sin(angle);
-		y = pos.getY() - SIZE2 * Math.cos(angle);
+		// camera center = robot center
+		x = pos.getX();
+		y = pos.getY();
 		
 		camera_pos.setX(x);
 		camera_pos.setY(y);
