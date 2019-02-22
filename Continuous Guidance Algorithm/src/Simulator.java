@@ -56,13 +56,13 @@ public class Simulator extends JPanel {
 		boolean cont = true;
 		while (cont) {
 			try {
-				if (cycles % Constants.CAMERA_FPS == 0) {
+				if (cycles % Constants.CAMERA_PERIOD_MSEC == 0) {
 					double cameraData[] = oppy.updateCamera();
 					
 					parallax = cameraData[0];
 					offAxis = cameraData[1];
 				}
-				if (cycles % Constants.CAMERA_FPS == Constants.CAMERA_LATENCY) { // latency on camera feed data
+				if (cycles % Constants.CAMERA_PERIOD_MSEC == Constants.CAMERA_LATENCY) { // latency on camera feed data
 					// feed data from last capture to guidance algorithm
 					GuidanceAlgorithm.setParallax(parallax);
 					GuidanceAlgorithm.setOffAxis(offAxis);
@@ -70,7 +70,7 @@ public class Simulator extends JPanel {
 					omega = GuidanceAlgorithm.getTurnRate();
 				}
 				
-				if (cycles % Constants.DRIVE_FPS == 0) {
+				if (cycles % Constants.DRIVE_PERIOD_MSEC == 0) {
 					oppy.rotate(omega); // give it a new turn rate
 				}
 				

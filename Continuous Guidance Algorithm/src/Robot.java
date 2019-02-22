@@ -51,7 +51,7 @@ public class Robot {
 	
 	
 	public void updateKinematics() {
-		angle += omega / Constants.KINEMATICS_FPS;
+		angle += omega / Constants.KINEMATICS_RATE_HZ;
 		
 		angle += Math.PI;
 		angle %= (2 * Math.PI);
@@ -67,8 +67,8 @@ public class Robot {
 		
 		double variation = velocityVariation * (2 * Math.random() - 1);
 
-		x -= (linearVelocity + variation) * Math.sin(angle) / Constants.KINEMATICS_FPS;
-		y -= (linearVelocity + variation) * Math.cos(angle) / Constants.KINEMATICS_FPS;
+		x -= (linearVelocity + variation) * Math.sin(angle) / Constants.KINEMATICS_RATE_HZ;
+		y -= (linearVelocity + variation) * Math.cos(angle) / Constants.KINEMATICS_RATE_HZ;
 		
 		pos.setX(x);
 		pos.setY(y);
