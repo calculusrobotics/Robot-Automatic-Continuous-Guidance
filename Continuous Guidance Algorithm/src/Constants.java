@@ -2,6 +2,8 @@ public class Constants {
 	public static final double VELOCITY_VARIATION = 0.0254;
 
 	public static final double VELOCITY_MAX = 3;
+	public static final double USER_CONTROL_TURN_RATE = Math.PI; // rad per second
+	public static final double USER_CONTROL_ACCELERATION = 2; // m/s^2
 
 	public static final double GUIDANCE_STOP = 0.1;
 	public static final double STOP_AT = 0.3;
@@ -22,7 +24,7 @@ public class Constants {
 	public static double VERTICAL_DISTANCE = 5;
 	
 	public static double HORIZONTAL_STARTING_POINT = 1;
-	public static double VERTICAL_STARTING_POINT   = 2;
+	public static double VERTICAL_STARTING_POINT   = 3;
 	
 	
 	public static int WIDTH = 1600;

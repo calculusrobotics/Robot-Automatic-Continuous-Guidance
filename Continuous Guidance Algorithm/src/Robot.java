@@ -21,6 +21,10 @@ public class Robot {
 	// meters per second
 	private double linearVelocity = Constants.VELOCITY_MAX;
 	
+	public void setVelocity(double velocity) {
+		linearVelocity = velocity;
+	}
+	
 	
 	
 	public double getOffAxis() {
@@ -65,10 +69,12 @@ public class Robot {
 		double x = pos.getX();
 		double y = pos.getY();
 		
-		double variation = velocityVariation * (2 * Math.random() - 1);
+		if (Math.abs(linearVelocity) > Math.abs(velocityVariation)) {
+			double variation = velocityVariation * (2 * Math.random() - 1);
 
-		x -= (linearVelocity + variation) * Math.sin(angle) / Constants.KINEMATICS_RATE_HZ;
-		y -= (linearVelocity + variation) * Math.cos(angle) / Constants.KINEMATICS_RATE_HZ;
+			x -= (linearVelocity + variation) * Math.sin(angle) / Constants.KINEMATICS_RATE_HZ;
+			y -= (linearVelocity + variation) * Math.cos(angle) / Constants.KINEMATICS_RATE_HZ;
+		}
 		
 		pos.setX(x);
 		pos.setY(y);

@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -28,11 +30,18 @@ public class Simulator extends JPanel {
 	
 	
 	
+	private boolean userControl = true;
+	private double user_velocity = 0;
+	private double user_acceleration = 0;
+	
+	
+	
 	
 	
 	public Simulator() {
 		frame = new JFrame("Roomba Guidance Algorithm");
 		
+		frame.addKeyListener(new ManualControl());
 		frame.add(this);
 		
 		oppy = new Robot();
@@ -54,34 +63,51 @@ public class Simulator extends JPanel {
 		double omega = 0; // turn rate to give to drive subsystem
 		
 		boolean cont = true;
+		
 		while (cont) {
 			try {
-				if (cycles % Constants.CAMERA_PERIOD_MSEC == 0) {
-					double cameraData[] = oppy.updateCamera();
-					
-					parallax = cameraData[0];
-					offAxis = cameraData[1];
-				}
-				
 				double distance = oppy.getCamera().distTo(new Coord(0, 0));
 				
-				if ((cycles % Constants.CAMERA_PERIOD_MSEC == Constants.CAMERA_LATENCY) &&
-					(distance > Constants.GUIDANCE_STOP)) { // latency on camera feed data
-					// feed data from last capture to guidance algorithm
-					GuidanceAlgorithm.setParallax(parallax);
-					GuidanceAlgorithm.setOffAxis(offAxis);
+				if (!userControl) {
+					if (cycles % Constants.CAMERA_PERIOD_MSEC == 0) {
+						double cameraData[] = oppy.updateCamera();
+						
+						parallax = cameraData[0];
+						offAxis = cameraData[1];
+					}
 					
-					omega = GuidanceAlgorithm.getTurnRate();
+					if ((cycles % Constants.CAMERA_PERIOD_MSEC == Constants.CAMERA_LATENCY) &&
+						(distance > Constants.GUIDANCE_STOP)) { // latency on camera feed data
+						// feed data from last capture to guidance algorithm
+						GuidanceAlgorithm.setParallax(parallax);
+						GuidanceAlgorithm.setOffAxis(offAxis);
+						
+						omega = GuidanceAlgorithm.getTurnRate();
+					}
+					
+					if (cycles % Constants.DRIVE_PERIOD_MSEC == 0) {
+						oppy.rotate(omega); // give it a new turn rate
+					}
+					
+					cycles++;
+					
+					oppy.setVelocity(Constants.VELOCITY_MAX);
+				} else {
+					user_velocity += user_acceleration / Constants.KINEMATICS_RATE_HZ;
+					
+					if (Math.abs(user_velocity) >= Constants.VELOCITY_MAX) {
+						user_velocity = Math.signum(user_velocity) * Constants.VELOCITY_MAX;
+					}
+					
+					oppy.setVelocity(user_velocity);
 				}
 				
-				if (cycles % Constants.DRIVE_PERIOD_MSEC == 0) {
-					oppy.rotate(omega); // give it a new turn rate
-				}
+				
 				
 				oppy.updateKinematics();
 				frame.repaint();
 				
-				// if sufficiently close (2 in), stop running simulator
+				// if sufficiently close, stop running simulator
 				
 				if (distance <= Constants.STOP_AT) {
 					cont = false;
@@ -90,8 +116,6 @@ public class Simulator extends JPanel {
 				
 				
 				Thread.sleep(1L);
-				
-				cycles++;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -148,6 +172,66 @@ public class Simulator extends JPanel {
 			10, 10 
 		);
 	}
+	
+	
+	
+	
+	
+	private class ManualControl implements KeyListener {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			int code = e.getKeyCode();
+			
+			
+			
+			if (code == KeyEvent.VK_ENTER) {
+				userControl = !userControl;
+				
+				oppy.rotate(0); // stop rotating
+				user_velocity = 0;
+				user_acceleration = 0;
+			}
+			
+			if (userControl) {
+				if (code == KeyEvent.VK_RIGHT) {
+					oppy.rotate(-Constants.USER_CONTROL_TURN_RATE);
+				} else if (code == KeyEvent.VK_LEFT) {
+					oppy.rotate(Constants.USER_CONTROL_TURN_RATE);
+				} else if (code == KeyEvent.VK_UP) {
+					user_acceleration = Constants.USER_CONTROL_ACCELERATION;
+				} else if (code == KeyEvent.VK_DOWN) {
+					user_acceleration = -Constants.USER_CONTROL_ACCELERATION;
+				} else if (code == KeyEvent.VK_SPACE) {
+					oppy.rotate(0);
+					
+					user_velocity = 0;
+					user_acceleration = 0;
+				}
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			int code = e.getKeyCode();
+			
+			if (userControl) {
+				if (code == KeyEvent.VK_RIGHT) {
+					oppy.rotate(0);
+				} else if (code == KeyEvent.VK_LEFT) {
+					oppy.rotate(0);
+				} else if (code == KeyEvent.VK_UP) {
+					user_acceleration = 0;
+				} else if (code == KeyEvent.VK_DOWN) {
+					user_acceleration = 0;
+				}
+			}
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {}
+	}
+	
+	
 	
 	
 	
