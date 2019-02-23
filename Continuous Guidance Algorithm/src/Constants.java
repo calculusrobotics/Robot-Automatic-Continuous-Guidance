@@ -27,7 +27,7 @@ public class Constants {
 	public static double VERTICAL_DISTANCE = 5;
 	
 	// for convenience, our brains don't work in radians but the math does
-	public static double STARTING_ANGLE_DEG = 45;
+	public static double STARTING_ANGLE_DEG = 25;
 	public static double STARTING_ANGLE = STARTING_ANGLE_DEG * Math.PI / 180;
 	public static double HORIZONTAL_STARTING_POINT = 0.5;
 	public static double VERTICAL_STARTING_POINT   = 2.2;
