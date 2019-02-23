@@ -150,7 +150,12 @@ public class Robot {
 			Math.abs(rightAngle) >= Constants.FOV_RAD2
 		);
 		
-		return new CameraFeedback(inFOV, getParallax(), getOffAxis());
+		boolean inAutoAssistRegion = (
+			pos.getX() * pos.getX() -
+			pos.getY() * pos.getY()
+		) <= Constants.RECTANGLE_DISTANCE * Constants.RECTANGLE_DISTANCE;
+		
+		return new CameraFeedback(inFOV, inAutoAssistRegion, getParallax(), getOffAxis());
 	}
 	
 	

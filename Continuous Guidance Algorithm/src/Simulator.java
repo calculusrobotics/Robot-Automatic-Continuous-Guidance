@@ -35,6 +35,7 @@ public class Simulator extends JPanel {
 	private double user_acceleration = 0;
 	
 	private boolean inFOV = false;
+	private boolean inAutoAssistRegion = false;
 	
 	
 	
@@ -75,6 +76,7 @@ public class Simulator extends JPanel {
 						CameraFeedback cameraData = oppy.updateCamera();
 						
 						inFOV = cameraData.isInFOV();
+						inAutoAssistRegion = cameraData.isInAutoAssistRegion();
 						parallax = cameraData.getParallax();
 						offAxis = cameraData.getOffAxis();
 					}
@@ -103,11 +105,12 @@ public class Simulator extends JPanel {
 					}
 				} else {
 					// keep using camera when in user control
-					// (to test if tape in FOV)
+					// (to test if tape in FOV and if in auto assist region)
 					if (cycles % Constants.CAMERA_PERIOD_MSEC == 0) {
 						CameraFeedback cameraData = oppy.updateCamera();
 						
 						inFOV = cameraData.isInFOV();
+						inAutoAssistRegion = cameraData.isInAutoAssistRegion();
 						parallax = cameraData.getParallax();
 						offAxis = cameraData.getOffAxis();
 					}
@@ -187,7 +190,11 @@ public class Simulator extends JPanel {
 		
 		
 		// robot camera
-		g.setColor(Color.GREEN);
+		if (inAutoAssistRegion) {
+			g.setColor(Color.GREEN);
+		} else {
+			g.setColor(Color.RED);
+		}
 		Point camera = Constants.toPoint(oppy.getCamera());
 		
 		g.fillOval(
@@ -197,7 +204,7 @@ public class Simulator extends JPanel {
 		
 		// FOV
 		if (inFOV) {
-			g.setColor(Color.BLUE);
+			g.setColor(Color.GREEN);
 		} else {
 			g.setColor(Color.RED);
 		}
