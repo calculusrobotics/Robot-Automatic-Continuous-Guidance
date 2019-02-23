@@ -82,6 +82,10 @@ public class Constants {
 			(WIDTH * (x + HORIZONTAL_DISTANCE) / (2 * HORIZONTAL_DISTANCE));
 	}
 	
+	public static int scaleCoordXToPointX(double x) {
+		return (int) (x * WIDTH / (2 * HORIZONTAL_DISTANCE));
+	}
+	
 	public static int coordYToPointY(double y) {
 		return (int)
 			(HEIGHT * y / VERTICAL_DISTANCE);

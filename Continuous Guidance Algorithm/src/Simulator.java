@@ -172,6 +172,10 @@ public class Simulator extends JPanel {
 			g.drawLine(left.getX(), left.getY(), left.getX(), left.getY());
 			g.drawLine(right.getX(), right.getY(), right.getX(), right.getY());
 		}
+		// threshold distance to stop using parallax
+		int xRadius = Constants.scaleCoordXToPointX(Constants.MIN_PARALLAX_DISTANCE);
+		int yRadius = Constants.coordYToPointY(Constants.MIN_PARALLAX_DISTANCE);
+		g.drawOval(WIDTH / 2 - xRadius, -yRadius, 2 * xRadius, 2 * yRadius);
 		
 		
 		
