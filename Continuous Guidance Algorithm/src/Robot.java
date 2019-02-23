@@ -29,7 +29,7 @@ public class Robot {
 	// 0 = straight up
 	// + = looking to the left
 	// - = looking to the right
-	private double angle = 0;
+	private double angle = Constants.STARTING_ANGLE;
 	private double omega = 0; // turn rate
 	
 	private double velocityVariation = Constants.VELOCITY_VARIATION;
