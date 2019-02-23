@@ -36,4 +36,12 @@ public class GuidanceAlgorithm {
 	public static void setOffAxis(double o) {
 		offAxis = o;
 	}
+	
+	public static void reset() {
+		parallax = 0;
+		offAxis = 0;
+		
+		controlLoop_parallax.reset();
+		controlLoop_offAxis.reset();
+	}
 }

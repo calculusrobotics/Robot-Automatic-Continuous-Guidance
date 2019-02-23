@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 
 /**
- * @author Howard Beck (calculusrobotics)
+ * @author Howard Beck (calculusrobotics), Mike Kessel (RocketRedNeck)
  */
 public class Simulator extends JPanel {
 	// we <3 Java
@@ -34,8 +34,11 @@ public class Simulator extends JPanel {
 	private double user_velocity = 0;
 	private double user_acceleration = 0;
 	
+	// BucketTables, basically
 	private boolean inFOV = false;
 	private boolean inAutoAssistRegion = false;
+	private double parallax = 0;
+	private double offAxis = 0;
 	
 	
 	
@@ -59,10 +62,6 @@ public class Simulator extends JPanel {
 		
 		int cycles = 0;
 		
-		// BucketTables, basically
-		double parallax = 0;
-		double offAxis = 0;
-		
 		double omega = 0; // turn rate to give to drive subsystem
 		
 		boolean cont = true;
@@ -77,14 +76,18 @@ public class Simulator extends JPanel {
 						
 						inFOV = cameraData.isInFOV();
 						inAutoAssistRegion = cameraData.isInAutoAssistRegion();
-						parallax = cameraData.getParallax();
-						offAxis = cameraData.getOffAxis();
+						if (inFOV) {
+							parallax = cameraData.getParallax();
+							offAxis = cameraData.getOffAxis();
+						} else {
+							GuidanceAlgorithm.reset();
+						}
 					}
 					
 					if ((cycles % Constants.CAMERA_PERIOD_MSEC == Constants.CAMERA_LATENCY) &&
 						(distance > Constants.GUIDANCE_STOP)) { // latency on camera feed data
+						// feed data from last capture to guidance algorithm
 						if (inFOV) {
-							// feed data from last capture to guidance algorithm
 							oppy.setVelocity(Constants.VELOCITY_MAX);
 							
 							GuidanceAlgorithm.setParallax(parallax);
@@ -92,11 +95,11 @@ public class Simulator extends JPanel {
 							
 							omega = GuidanceAlgorithm.getTurnRate(distance);
 						} else {
-							GuidanceAlgorithm.setParallax(0);
-							GuidanceAlgorithm.setOffAxis(0);
+							// reduced velocity
+							oppy.setVelocity(Constants.VELOCITY_MAX);
 							
-							omega = 0;
-							oppy.stop();
+							// use last offAxis in hopes that it will get rectangles in FOV
+							omega = Constants.OFF_AXIS_KP * offAxis;
 						}
 					}
 					

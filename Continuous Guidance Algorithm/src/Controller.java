@@ -46,4 +46,11 @@ public class Controller {
 		
 		return ret;
 	}
+	
+	
+	
+	public void reset() {
+		previous = 0;
+		integral = 0;
+	}
 }
