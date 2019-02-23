@@ -90,7 +90,7 @@ public class Simulator extends JPanel {
 							GuidanceAlgorithm.setParallax(parallax);
 							GuidanceAlgorithm.setOffAxis(offAxis);
 							
-							omega = GuidanceAlgorithm.getTurnRate();
+							omega = GuidanceAlgorithm.getTurnRate(distance);
 						} else {
 							GuidanceAlgorithm.setParallax(0);
 							GuidanceAlgorithm.setOffAxis(0);
@@ -186,9 +186,7 @@ public class Simulator extends JPanel {
 		g.drawLine(topRight.getX(), topRight.getY(), bottomRight.getX(), bottomRight.getY());
 		g.drawLine(bottomRight.getX(), bottomRight.getY(), bottomLeft.getX(), bottomLeft.getY());
 		g.drawLine(bottomLeft.getX(), bottomLeft.getY(), topLeft.getX(), topLeft.getY());
-		
-		
-		
+				
 		// robot camera
 		if (inAutoAssistRegion) {
 			g.setColor(Color.GREEN);
@@ -210,6 +208,7 @@ public class Simulator extends JPanel {
 		}
 		Point fovMarker1 = Constants.toPoint(oppy.getFOVMarker1());
 		Point fovMarker2 = Constants.toPoint(oppy.getFOVMarker2());
+		Point armMarker = Constants.toPoint(oppy.getArmMarker());
 		
 		g.drawLine(
 			camera.getX(), camera.getY(),
@@ -218,6 +217,12 @@ public class Simulator extends JPanel {
 		g.drawLine(
 				camera.getX(), camera.getY(),
 				fovMarker2.getX(), fovMarker2.getY()
+			);
+		
+		g.setColor(Color.BLACK);
+		g.drawLine(
+				camera.getX(), camera.getY(),
+				armMarker.getX(), armMarker.getY()
 			);
 	}
 	

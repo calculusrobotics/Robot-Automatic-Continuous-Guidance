@@ -12,9 +12,15 @@ public class GuidanceAlgorithm {
 	
 	
 	
-	public static double getTurnRate() {
+	public static double getTurnRate(double distance) {
 		double parallax_contribution = controlLoop_parallax.newValue(parallax);
 		double offAxis_contribution  = controlLoop_offAxis .newValue(offAxis);
+		
+		if (distance < Constants.MIN_PARALLAX_DISTANCE)
+		{
+			parallax_contribution = 0;
+			offAxis_contribution *= Constants.OFF_AXIS_GAIN_BOOST;
+		}
 		
 		double omega = parallax_contribution + offAxis_contribution;
 		

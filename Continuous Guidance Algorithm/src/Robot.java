@@ -204,6 +204,14 @@ public class Robot {
 		
 		return new Coord(x, y);
 	}
+
+	public Coord getArmMarker() {
+		double x = camera_pos.getX() - Constants.ARM_MARKER_LENGTH * Math.sin(angle);
+		double y = camera_pos.getY() - Constants.ARM_MARKER_LENGTH * Math.cos(angle);
+		
+		return new Coord(x, y);
+	}
+	
 	
 	public Coord getCamera() {
 		return camera_pos;
