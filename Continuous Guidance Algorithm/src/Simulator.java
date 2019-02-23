@@ -99,7 +99,7 @@ public class Simulator extends JPanel {
 							oppy.setVelocity(Constants.VELOCITY_MAX);
 							
 							// use last offAxis in hopes that it will get rectangles in FOV
-							omega = Constants.OFF_AXIS_KP * offAxis;
+							omega = Constants.OFF_AXIS_KP * offAxis * Constants.OFF_AXIS_GAIN_BOOST;
 						}
 					}
 					
@@ -114,8 +114,12 @@ public class Simulator extends JPanel {
 						
 						inFOV = cameraData.isInFOV();
 						inAutoAssistRegion = cameraData.isInAutoAssistRegion();
-						parallax = cameraData.getParallax();
-						offAxis = cameraData.getOffAxis();
+						if (inFOV) {
+							parallax = cameraData.getParallax();
+							offAxis = cameraData.getOffAxis();
+						} else {
+							GuidanceAlgorithm.reset();
+						}
 					}
 					
 					
