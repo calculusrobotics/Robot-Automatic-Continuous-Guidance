@@ -3,6 +3,24 @@ public class Robot {
 	public static final double SIZE2 = Constants.ROBOT_SIZE / 2;
 	public static final double DIAG = Math.sqrt(2) * SIZE2;
 	
+	
+	
+	/**
+	 * Put angle in [-PI, PI]
+	 */
+	private static double mag180(double angle) {
+		angle += Math.PI;
+		angle %= (2 * Math.PI);
+		if (angle < 0) {
+			angle += 2 * Math.PI;
+		}
+		angle -= Math.PI;
+		
+		return angle;
+	}
+	
+	
+	
 	private Coord pos = new Coord(Constants.HORIZONTAL_STARTING_POINT, Constants.VERTICAL_STARTING_POINT);
 	private Coord camera_pos = new Coord(
 		Constants.HORIZONTAL_STARTING_POINT,
@@ -30,7 +48,7 @@ public class Robot {
 	public double getOffAxis() {
 		double robotAngle = Math.atan(pos.getX() / pos.getY());
 		
-		return robotAngle - angle;
+		return mag180(robotAngle - angle);
 	}
 	
 	public double getLeftOffAxis() {
@@ -41,7 +59,7 @@ public class Robot {
 		
 		double rectangleAngle = Math.atan(vec.getX() / vec.getY());
 		
-		return rectangleAngle - angle;
+		return mag180(rectangleAngle - angle);
 	}
 	
 	public double getRightOffAxis() {
@@ -52,7 +70,7 @@ public class Robot {
 		
 		double rectangleAngle = Math.atan(vec.getX() / vec.getY());
 		
-		return rectangleAngle - angle;
+		return mag180(rectangleAngle - angle);
 	}
 	
 	
@@ -113,9 +131,7 @@ public class Robot {
 		
 		angle += real_omega / Constants.KINEMATICS_RATE_HZ;
 		
-		angle += Math.PI;
-		angle %= (2 * Math.PI);
-		angle -= Math.PI;
+		angle = mag180(angle);
 		
 		
 		
